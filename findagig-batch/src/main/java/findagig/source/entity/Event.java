@@ -93,4 +93,19 @@ public class Event {
     public enum Type {
         CONCERT, FESTIVAL
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", displayName='" + displayName + '\'' +
+                ", type=" + type +
+                ", uri='" + uri + '\'' +
+                ", venue=" + venue +
+                ", startDateTime=" + startDateTime +
+                ", endDateTime=" + endDateTime +
+                ", status=" + status +
+                ", artists=" + artists +
+                '}';
+    }
 }

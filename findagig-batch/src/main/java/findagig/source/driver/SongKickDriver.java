@@ -10,14 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class SongkickDriver {
+/**
+ * SongKickDriver is class used to parse information from SongKick to java entities that represent
+ * objects from the SongKick API
+ *
+ * This class is temporarily a mocking class
+ *
+ * @author Diego Irismar da Costa
+ * @version 1.0
+ */
+public class SongKickDriver {
 
+    /**
+     * Gets a List of Events from SongKick (temporarily providing mocking information)
+     * @param city from the Events will take place
+     * @param fromDate starting date of the search
+     * @return
+     */
     public List<Event> getEventsByLocationFromDate(String city, LocalDate fromDate) {
+
         List<Event> events = new ArrayList<>();
 
         int howMany = new Random().nextInt(10);
 
-        for (int i = 0; howMany < i; i++) {
+        System.out.println("<<< NUMBER OF EVENT(S) CONSUMED FROM SOURCE >>> " + howMany);
+
+        for (int i = 0; i < howMany; i++) {
             Event e = new Event();
             e.setArtists(createArtist());
             e.setDisplayName("Event From Hell #" + i);
@@ -29,10 +47,15 @@ public class SongkickDriver {
             e.setVenue(createVenue(city));
             events.add(e);
         }
-
         return events;
     }
 
+
+    /**
+     * Creates a Venue (mock)
+     * @param city is the Venue location
+     * @return
+     */
     private Venue createVenue(String city) {
         Venue venue = new Venue();
         venue.setCity(city);
@@ -46,6 +69,11 @@ public class SongkickDriver {
         return venue;
     }
 
+
+    /**
+     * Creates an Artist (mock)
+     * @return a List containing the created Artist
+     */
     private List<Artist> createArtist() {
         Artist artist = new Artist();
         artist.setDisplayName("Husker Du");
@@ -56,6 +84,4 @@ public class SongkickDriver {
         artists.add(artist);
         return artists;
     }
-
-
 }

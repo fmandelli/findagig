@@ -10,8 +10,8 @@ class SongkickDriverTest {
 
     @Test
     void getEventsByLocationFromDate() {
-
-        SongkickDriver driver = new SongkickDriver();
+        SongKickDriver driver = new SongKickDriver();
         List<Event> events = driver.getEventsByLocationFromDate("Munchen", LocalDate.now());
     }
+
 }
