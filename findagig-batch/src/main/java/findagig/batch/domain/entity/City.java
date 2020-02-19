@@ -12,7 +12,7 @@ import findagig.batch.domain.vo.Country;
 public class City {
 
     private int id;
-    private String name;
+    private String displayName;
     private Country country;
 
     public int getId() {
@@ -23,12 +23,12 @@ public class City {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Country getCountry() {
@@ -37,5 +37,15 @@ public class City {
 
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("City{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", country=").append(country);
+        sb.append('}');
+        return sb.toString();
     }
 }

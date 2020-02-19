@@ -28,4 +28,14 @@ public class Artist {
     public void setUri(final String uri) {
         this.uri = uri;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Artist{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", uri='").append(uri).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

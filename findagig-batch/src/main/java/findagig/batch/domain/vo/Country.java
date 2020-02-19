@@ -10,11 +10,11 @@ package findagig.batch.domain.vo;
 public class Country {
 
     private final int id;
-    private final String name;
+    private final String displayName;
 
-    public Country(int id, String name) {
+    public Country(int id, String displayName) {
         this.id = id;
-        this.name = name;
+        this.displayName = displayName;
     }
 
     public int getId() {
@@ -22,6 +22,15 @@ public class Country {
     }
 
     public String getName() {
-        return name;
+        return displayName;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Country{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -10,11 +10,11 @@ package findagig.batch.domain.vo;
 public class MusicStyle {
 
     private final int id;
-    private final String description;
+    private final String displayName;
 
-    public MusicStyle(int id, String description) {
+    public MusicStyle(int id, String displayName) {
         this.id = id;
-        this.description = description;
+        this.displayName = displayName;
     }
 
     public int getId() {
@@ -22,6 +22,15 @@ public class MusicStyle {
     }
 
     public String getDescription() {
-        return description;
+        return displayName;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MusicStyle{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

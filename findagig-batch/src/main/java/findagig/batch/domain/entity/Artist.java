@@ -13,7 +13,7 @@ import java.util.List;
 public class Artist {
 
     private long id;
-    private String name;
+    private String displayName;
     private String website;
     private String summary;
     private List<MusicStyle> musicStyles;
@@ -27,12 +27,12 @@ public class Artist {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getWebsite() {
@@ -65,5 +65,18 @@ public class Artist {
 
     public void setSourceURI(String sourceURI) {
         this.sourceURI = sourceURI;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Artist{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", website='").append(website).append('\'');
+        sb.append(", summary='").append(summary).append('\'');
+        sb.append(", musicStyles=").append(musicStyles);
+        sb.append(", sourceURI='").append(sourceURI).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
