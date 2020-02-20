@@ -93,4 +93,20 @@ public class Event {
     public enum Type {
         CONCERT, FESTIVAL
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Event{");
+        sb.append("id=").append(id);
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", type=").append(type);
+        sb.append(", uri='").append(uri).append('\'');
+        sb.append(", venue=").append(venue);
+        sb.append(", startDateTime=").append(startDateTime);
+        sb.append(", endDateTime=").append(endDateTime);
+        sb.append(", status=").append(status);
+        sb.append(", artists=").append(artists);
+        sb.append('}');
+        return sb.toString();
+    }
 }
