@@ -14,7 +14,7 @@ import java.util.Random;
 /**
  * SongKickDriver is class used to parse information from SongKick to java entities that represent
  * objects from the SongKick API
- *
+ * <p>
  * This class is temporarily a mocking class
  *
  * @author Diego Irismar da Costa
@@ -24,17 +24,22 @@ public class SongKickDriver {
 
     public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://demo5448093.mockable.io";
     public static final String SONG_KICK_API_KEY = "9876543210";
+    private int maxExecutions = new Random().nextInt(3);
 
 
     /**
      * Gets a List of Events from SongKick (temporarily providing mocking information)
-     * @param city from the Events will take place
+     *
+     * @param city     from the Events will take place
      * @param fromDate starting date of the search
      * @return
      */
-    public List<Event> getEventsByLocationFromDate(String city, LocalDate fromDate) {
+    public List<Event> getEventsByLocationFromDate(String city, LocalDate fromDate, int fromPage) {
 
         List<Event> events = new ArrayList<>();
+        if (fromPage > maxExecutions) {
+            return events;
+        }
 
         int howMany = new Random().nextInt(10);
 
@@ -58,6 +63,7 @@ public class SongKickDriver {
 
     /**
      * Creates a Venue (mock)
+     *
      * @param city is the Venue location
      * @return
      */
@@ -78,6 +84,7 @@ public class SongKickDriver {
 
     /**
      * Creates an Artist (mock)
+     *
      * @return a List containing the created Artist
      */
     private List<Artist> createArtist() {
@@ -94,6 +101,7 @@ public class SongKickDriver {
 
     /**
      * Searches for one more Events in a specific SongKick's MetroAreaId
+     *
      * @param metroAreaId
      * @return it is TEMPORARILY returning a String containing a Response from SongKick API
      */
@@ -113,9 +121,8 @@ public class SongKickDriver {
             System.out.println(result);
 
             return result;
-        }
-        catch (Exception e) {
-            System.out.println("ERROR: " + this.getClass().getName() + ". " + e.getStackTrace()[0].getMethodName()) ;
+        } catch (Exception e) {
+            System.out.println("ERROR: " + this.getClass().getName() + ". " + e.getStackTrace()[0].getMethodName());
         }
         return null;
     }
