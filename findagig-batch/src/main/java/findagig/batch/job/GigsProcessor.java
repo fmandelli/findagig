@@ -1,7 +1,7 @@
 package findagig.batch.job;
 
 import findagig.batch.domain.entity.Gig;
-import findagig.batch.domain.factory.SongKickGigsFactory;
+import findagig.batch.domain.factory.GigsFactory;
 import findagig.source.entity.Event;
 import org.springframework.batch.item.ItemProcessor;
 
@@ -10,12 +10,12 @@ import java.util.List;
 
 public class GigsProcessor implements ItemProcessor<Event, List<Gig>> {
 
-    SongKickGigsFactory songKickGigsFactory = new SongKickGigsFactory();
+    GigsFactory gigsFactory = new GigsFactory();
     List<Gig> gigs = new ArrayList<Gig>();
 
     @Override
     public List<Gig> process(Event songKickEvent) throws Exception {
-        this.gigs = this.songKickGigsFactory.createGigs(songKickEvent);
+        this.gigs = this.gigsFactory.createGigs(songKickEvent);
         return this.gigs;
     }
 
