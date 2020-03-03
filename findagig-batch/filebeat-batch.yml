@@ -1,0 +1,21 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - ${FILEBEAT_LOGFILE}
+
+queue.mem:
+  events: 8000
+  flush.min_events: 5
+  flush.timeout: 1s
+
+output:
+  elasticsearch:
+    hosts: ["cloud.humio.com:443"]
+    protocol: https
+    path: /api/v1/ingest/elastic-bulk
+    username: anything
+    password: ${FILEBEAT_TOKEN}
+    compression_level: 5
+    bulk_max_size: 2
+    worker: 1

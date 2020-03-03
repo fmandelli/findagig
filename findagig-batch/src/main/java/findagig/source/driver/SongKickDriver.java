@@ -24,7 +24,7 @@ public class SongKickDriver {
 
     public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://demo5448093.mockable.io";
     public static final String SONG_KICK_API_KEY = "9876543210";
-    private int maxExecutions = new Random().nextInt(3);
+    private int maxExecutions = new Random().nextInt(55);
 
 
     /**
