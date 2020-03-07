@@ -1,26 +1,27 @@
-package findagig.batch.domain.entity;
+package findagig.source.entity;
 
-import findagig.batch.domain.vo.Country;
+public class MetroArea {
 
-/**
- * City is an Entity/Bean class that represents a city.
- * Ex: Winnipeg, Toronto, Buenos Aires, and etc
- *
- * @author Flavio A. Mandelli and Diego Irismar da Costa
- * @version 1.0
- */
-public class City {
-
-    private int id;
+    private Long id;
+    private String uri;
     private String displayName;
     private Country country;
+    private State state;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getDisplayName() {
@@ -39,12 +40,23 @@ public class City {
         this.country = country;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("City{");
+        final StringBuilder sb = new StringBuilder("MetroArea{");
         sb.append("id=").append(id);
+        sb.append(", uri='").append(uri).append('\'');
         sb.append(", displayName='").append(displayName).append('\'');
         sb.append(", country=").append(country);
+        sb.append(", state=").append(state);
         sb.append('}');
         return sb.toString();
     }

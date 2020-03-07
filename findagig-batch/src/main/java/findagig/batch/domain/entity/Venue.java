@@ -16,7 +16,7 @@ public class Venue {
     private String zipCode;
     private Float latitude;
     private Float longitude;
-    private City city;
+    private Location location;
     private String sourceURI;
 
     public long getId() {
@@ -83,12 +83,12 @@ public class Venue {
         this.longitude = longitude;
     }
 
-    public City getCity() {
-        return city;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public String getSourceURI() {
@@ -98,6 +98,7 @@ public class Venue {
     public void setSourceURI(String sourceURI) {
         this.sourceURI = sourceURI;
     }
+
 
     @Override
     public String toString() {
@@ -110,7 +111,7 @@ public class Venue {
         sb.append(", zipCode='").append(zipCode).append('\'');
         sb.append(", latitude=").append(latitude);
         sb.append(", longitude=").append(longitude);
-        sb.append(", city=").append(city);
+        sb.append(", location=").append(location);
         sb.append(", sourceURI='").append(sourceURI).append('\'');
         sb.append('}');
         return sb.toString();
