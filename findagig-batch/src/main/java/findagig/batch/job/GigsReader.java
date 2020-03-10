@@ -69,8 +69,12 @@ public class GigsReader implements ItemReader<Event> {
 
     private List<Event> readNewEvents(int fromPage) {
         long time = System.currentTimeMillis();
-        List<Event> results = driver.getEventsByLocationFromDate("Winnipeg,", LocalDate.now(), fromPage);
-        logger.info("Events page read", keyValue("event", "EVENT_READ"), keyValue("page", fromPage), keyValue("duration", System.currentTimeMillis() - time));
-        return results;
+        List<Event> events = driver.getEventsByLocationFromDate("Winnipeg,", LocalDate.now(), fromPage);
+        logger.info("Events page read",
+                keyValue("event", "EVENT_READ"),
+                keyValue("page", fromPage),
+                keyValue("duration", System.currentTimeMillis() - time)
+        );
+        return events;
     }
 }

@@ -48,7 +48,6 @@ public class MetroArea {
         this.state = state;
     }
 
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("MetroArea{");

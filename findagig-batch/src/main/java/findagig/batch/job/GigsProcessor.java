@@ -18,5 +18,4 @@ public class GigsProcessor implements ItemProcessor<Event, List<Gig>> {
         this.gigs = this.gigsFactory.createGigs(event);
         return this.gigs;
     }
-
 }

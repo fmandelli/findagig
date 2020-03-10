@@ -15,6 +15,5 @@ public class GigsWriter implements ItemWriter<List<Gig>> {
                 System.out.println("Gig " + gig);
             });
         });
-
     }
 }

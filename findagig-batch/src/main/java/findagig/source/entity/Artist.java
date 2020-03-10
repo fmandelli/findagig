@@ -38,4 +38,5 @@ public class Artist {
         sb.append('}');
         return sb.toString();
     }
+
 }

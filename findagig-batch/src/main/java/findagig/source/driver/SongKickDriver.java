@@ -40,11 +40,10 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
  */
 public class SongKickDriver {
 
-    public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://api.songkick.com/api/3.0";
-    public static final String SONG_KICK_API_KEY = "EDaoxv9PhlnV2HYy";
-    private int maxExecutions = new Random().nextInt(3);
+    public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://demo5448093.mockable.io";
+    public static final String SONG_KICK_API_KEY = "9876543210";
+    private int maxExecutions = new Random().nextInt(55);
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     /**
      * Gets a List of Events from SongKick (temporarily providing mocking information)

@@ -13,7 +13,6 @@ public class Event {
     private Status status;
 
     /*
-
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 

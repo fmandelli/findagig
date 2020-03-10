@@ -19,6 +19,7 @@ public class Artist {
     private List<MusicStyle> musicStyles;
     private String sourceURI;
 
+
     public long getId() {
         return id;
     }
