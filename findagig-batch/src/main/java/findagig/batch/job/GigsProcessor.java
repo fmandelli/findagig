@@ -11,12 +11,11 @@ import java.util.List;
 public class GigsProcessor implements ItemProcessor<Event, List<Gig>> {
 
     GigsFactory gigsFactory = new GigsFactory();
-    List<Gig> gigs = new ArrayList<Gig>();
+    List<Gig> gigs = new ArrayList<>();
 
     @Override
-    public List<Gig> process(Event songKickEvent) throws Exception {
-        this.gigs = this.gigsFactory.createGigs(songKickEvent);
+    public List<Gig> process(Event event) throws Exception {
+        this.gigs = this.gigsFactory.createGigs(event);
         return this.gigs;
     }
-
 }

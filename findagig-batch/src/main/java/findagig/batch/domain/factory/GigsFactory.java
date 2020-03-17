@@ -1,10 +1,9 @@
 package findagig.batch.domain.factory;
 
 import findagig.batch.domain.entity.Artist;
-import findagig.batch.domain.entity.City;
 import findagig.batch.domain.entity.Gig;
+import findagig.batch.domain.entity.Location;
 import findagig.batch.domain.entity.Venue;
-import findagig.batch.domain.vo.Country;
 import findagig.source.entity.Event;
 
 import java.util.ArrayList;
@@ -21,15 +20,16 @@ public class GigsFactory {
      */
     public List<Gig> createGigs(Event event) {
 
-        List<Gig> gigs = new ArrayList<Gig>();
+        List<Gig> gigs = new ArrayList<>();
 
-        event.getArtists().forEach(artist -> {
+
+        event.getPerformance().forEach(artist -> {
             Gig gig = new Gig();
-            gig.setId(new Random().nextLong());
+            gig.setId(event.getId());
             gig.setSourceURI(event.getUri());
             gig.setDisplayName(event.getDisplayName());
-            gig.setStartDateTime(event.getStartDateTime());
-            gig.setEndDateTime(event.getEndDateTime());
+            //gig.setStartDateTime(event.getStartDateTime());
+            //gig.setEndDateTime(event.getEndDateTime());
             gig.setStatus(event.getStatus().toString());
             gig.setType(event.getType().toString());
 
@@ -38,6 +38,7 @@ public class GigsFactory {
             gig.setVenue(this.createVenue(event.getVenue()));
             gigs.add(gig);
         });
+
         return gigs;
     }
 
@@ -68,19 +69,18 @@ public class GigsFactory {
         venue.setId(sourceVenue.getId());
         venue.setDescription("");
         venue.setDisplayName(sourceVenue.getDisplayName());
-        venue.setWebsite(sourceVenue.getWebsite());
-        venue.setStreet(sourceVenue.getStreet());
-        venue.setZipCode(sourceVenue.getZip());
-        venue.setLatitude(sourceVenue.getLatitude());
-        venue.setLongitude(sourceVenue.getLongitude());
+        //venue.setWebsite(sourceVenue.getWebsite());
+        //venue.setStreet(sourceVenue.getStreet());
+        //venue.setZipCode(sourceVenue.getZip());
+        venue.setLatitude(sourceVenue.getLat());
+        venue.setLongitude(sourceVenue.getLng());
         venue.setSourceURI(sourceVenue.getUri());
 
-        Country country = new Country(new Random().nextInt(), sourceVenue.getCountry());
-        City city = new City();
-        city.setDisplayName(sourceVenue.getCity());
-        city.setCountry(country);
-        city.setId(new Random().nextInt());
-        venue.setCity(city);
+        Location location = new Location();
+        location.setCity(sourceVenue.getMetroArea().getDisplayName());
+        location.setState(sourceVenue.getMetroArea().getState().getDisplayName());
+        location.setCountry(sourceVenue.getMetroArea().getCountry().getDisplayName());
+        venue.setLocation(location);
         return venue;
     }
 }

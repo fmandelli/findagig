@@ -11,36 +11,61 @@ import org.springframework.batch.item.UnexpectedInputException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 public class GigsReader implements ItemReader<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private List<Event> songKickEvents = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
     private SongKickDriver driver;
+    private Map<String, Integer> metroAreas = new HashMap<>();
     private int page = 0;
 
     public GigsReader() {
         driver = new SongKickDriver();
+
+        //At this point, only events from the below cities will be collected.
+        //The HashMap below contains a key/value of City and MetroAreaId
+        metroAreas.put("WINNIPEG", 27403);
+        metroAreas.put("TORONTO", 27396);
+        metroAreas.put("VANCOUVER", 27398);
+        metroAreas.put("MUNICH", 28549);
     }
 
     @Override
     public Event read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        if (!this.songKickEvents.isEmpty()) {
-            System.out.println("<<<  PROCESSING THE FOLLOWING EVENT FROM SOURCE >>> " + this.songKickEvents.get(0).getId());
-            return this.songKickEvents.remove(0);
+        events = readEvents();
+        if (!this.events.isEmpty()) {
+            return this.events.remove(0);
         } else {
             page++;
-            songKickEvents = readNewEvents(page);
-            if (songKickEvents.isEmpty()) {
+            events = readNewEvents(page);
+            if (events.isEmpty()) {
                 page = 0;
                 return null;
             }
-            return this.songKickEvents.remove(0);
+            return this.events.remove(0);
         }
     }
+
+
+    protected List<Event> readEvents() {
+        metroAreas.forEach((key, value) -> {
+            long time = System.currentTimeMillis();
+            List<Event> newList = driver.getUpcomingEventsByMetroAreaId(value);
+            logger.info("Events read", keyValue("event", "EVENT_READ"), keyValue("METRO_AREA", key), keyValue("duration", System.currentTimeMillis() - time));
+
+            events.addAll(newList);
+        });
+        return events;
+    }
+
 
     private List<Event> readNewEvents(int fromPage) {
         long time = System.currentTimeMillis();

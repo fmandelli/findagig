@@ -12,9 +12,8 @@ public class GigsWriter implements ItemWriter<List<Gig>> {
 
         list.stream().forEach(gigs -> {
             gigs.stream().forEach(gig -> {
-                System.out.println("Gig " + gig.getArtist().getDisplayName());
+                System.out.println("Gig " + gig);
             });
         });
-
     }
 }

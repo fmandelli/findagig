@@ -21,6 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback.version>1.2.3</logback.version>
         <logstash.version>6.3</logstash.version>
+        <jackson.version>2.10.2</jackson.version>
     </properties>
 
     <modules>
@@ -50,6 +51,14 @@
             <artifactId>logback-access</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
