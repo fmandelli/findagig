@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
@@ -33,9 +31,9 @@ public class GigsReader implements ItemReader<Event> {
         //At this point, only events from the below cities will be collected.
         //The HashMap below contains a key/value of City and MetroAreaId
         metroAreas.put("WINNIPEG", 27403);
-        metroAreas.put("TORONTO", 27396);
-        metroAreas.put("VANCOUVER", 27398);
-        metroAreas.put("MUNICH", 28549);
+        //metroAreas.put("TORONTO", 27396);
+        //metroAreas.put("VANCOUVER", 27398);
+        //metroAreas.put("MUNICH", 28549);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class GigsReader implements ItemReader<Event> {
     }
 
 
-    protected List<Event> readEvents() {
+    private List<Event> readEvents() {
         metroAreas.forEach((key, value) -> {
             long time = System.currentTimeMillis();
             List<Event> newList = driver.getUpcomingEventsByMetroAreaId(value);

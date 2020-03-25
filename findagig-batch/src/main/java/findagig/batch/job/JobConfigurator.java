@@ -33,9 +33,10 @@ public class JobConfigurator {
 
     @Bean
     public Step orderStep1() {
-        return stepBuilderFactory.get("orderStep1").<Event, List<Gig>>chunk(1)
+        return stepBuilderFactory.get("orderStep1").<Event, Event>chunk(1)
+        //return stepBuilderFactory.get("orderStep1").<Event, List<Gig>>chunk(1)
                 .reader(new GigsReader())
-                .processor(new GigsProcessor())
+                //.processor(new GigsProcessor())
                 .writer(new GigsWriter()).build();
     }
 

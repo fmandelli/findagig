@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class GigsReaderTest {
 
     @Test
-    void read() {
+    void read() throws Exception {
         GigsReader reader = new GigsReader();
-        List<Event> allEvents = reader.readEvents();
-        assertTrue(allEvents.size() > 50);
+        Event event = reader.read();
+        assertTrue(event != null);
     }
 }
