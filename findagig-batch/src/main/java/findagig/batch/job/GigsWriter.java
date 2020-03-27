@@ -1,6 +1,7 @@
 package findagig.batch.job;
 
 import findagig.batch.domain.entity.Gig;
+import findagig.broker.kafka.EventProducer;
 import findagig.source.entity.Event;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -14,12 +15,22 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
 public class GigsWriter implements ItemWriter<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private EventProducer eventProducer;
+
+    public GigsWriter() {
+        eventProducer = new EventProducer();
+    }
 
     @Override
-    public void write(List<? extends Event> items) throws Exception {
+    public void write(List<? extends Event> events) throws Exception {
         long time = System.currentTimeMillis();
-        items.stream().forEach(item -> {
-            logger.info("Event was written", keyValue("event", "EVENT_WRITE"), keyValue("EVENT_ID", item.getId()), keyValue("EVENT_DISPLAY-NAME", item.getDisplayName()), keyValue("duration", System.currentTimeMillis() - time));
+        events.stream().forEach(event -> {
+            eventProducer.produce(event);
+            logger.info("Event written on destination",
+                    keyValue("event", "EVENT_WRITE"),
+                    keyValue("EVENT_ID", event.getId()),
+                    keyValue("EVENT_DISPLAY-NAME", event.getDisplayName()),
+                    keyValue("duration", System.currentTimeMillis() - time));
         });
     }
 }
