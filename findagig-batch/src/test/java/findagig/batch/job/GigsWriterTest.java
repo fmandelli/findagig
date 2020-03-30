@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
@@ -18,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GigsWriterTest {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Test
     void write() throws Exception {
         GigsReader reader = new GigsReader();
+        GigsWriter writer = new GigsWriter();
         Event event = reader.read();
-        Assert.assertTrue(event != null);
-        Assert.assertTrue(event.getDisplayName().length() > 0);
+        List<Event> list = new ArrayList<>();
+        list.add(event);
+        assertAll(() -> writer.write(list));
     }
 }
