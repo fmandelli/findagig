@@ -1,6 +1,5 @@
 package findagig.batch.job;
 
-import findagig.batch.domain.entity.Gig;
 import findagig.source.entity.Event;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 public class JobConfigurator {
 
@@ -23,6 +20,12 @@ public class JobConfigurator {
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    private GigsReader gigsReader;
+
+    @Autowired
+    private GigsWriter gigsWriter;
 
     @Bean
     public Job processJob() {
@@ -35,9 +38,9 @@ public class JobConfigurator {
     public Step orderStep1() {
         return stepBuilderFactory.get("orderStep1").<Event, Event>chunk(1)
         //return stepBuilderFactory.get("orderStep1").<Event, List<Gig>>chunk(1)
-                .reader(new GigsReader())
+                .reader(gigsReader)
                 //.processor(new GigsProcessor())
-                .writer(new GigsWriter()).build();
+                .writer(gigsWriter).build();
     }
 
     @Bean
