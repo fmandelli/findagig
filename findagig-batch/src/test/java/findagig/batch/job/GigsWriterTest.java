@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class GigsWriterTest {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Test
     void write() throws Exception {
         GigsReader reader = new GigsReader();
