@@ -20,7 +20,7 @@ public class Event {
      */
 
     public enum Status {
-        OK, CANCELLED
+        OK, CANCELLED, POSTPONED
     }
 
 

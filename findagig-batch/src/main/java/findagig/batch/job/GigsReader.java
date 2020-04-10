@@ -8,6 +8,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
+@Service
 public class GigsReader implements ItemReader<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
