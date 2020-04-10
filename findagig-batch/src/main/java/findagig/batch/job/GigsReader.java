@@ -40,6 +40,8 @@ public class GigsReader implements ItemReader<Event> {
 
     @Override
     public Event read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+        return null;
+        /**
         events = readEvents();
         if (!this.events.isEmpty()) {
             return this.events.remove(0);
@@ -52,6 +54,7 @@ public class GigsReader implements ItemReader<Event> {
             }
             return this.events.remove(0);
         }
+         **/
     }
 
 

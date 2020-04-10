@@ -46,7 +46,6 @@ public class EventProducer {
         kafkaProducer = new KafkaProducer(properties);
     }
 
-
     /**
      * Produces an Event on Kafka's Event topic
      * @param event an Event object to be produced on the topic
