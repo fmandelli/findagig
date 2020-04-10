@@ -35,7 +35,9 @@ public class GigsFactory {
 
             gig.setArtist(this.createArtist(artist));
 
-            gig.setVenue(this.createVenue(event.getVenue()));
+            if (event.getVenue() != null) {
+                gig.setVenue(this.createVenue(event.getVenue()));
+            }
             gigs.add(gig);
         });
 
@@ -66,7 +68,7 @@ public class GigsFactory {
      */
     private Venue createVenue(findagig.source.entity.Venue sourceVenue) {
         Venue venue = new Venue();
-        venue.setId(sourceVenue.getId());
+        venue.setId(sourceVenue.getId() != null ? sourceVenue.getId() : 0);
         venue.setDescription("");
         venue.setDisplayName(sourceVenue.getDisplayName());
         //venue.setWebsite(sourceVenue.getWebsite());
