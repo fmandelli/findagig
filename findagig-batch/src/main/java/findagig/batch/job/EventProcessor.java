@@ -8,7 +8,7 @@ import org.springframework.batch.item.ItemProcessor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GigsProcessor implements ItemProcessor<Event, List<Gig>> {
+public class EventProcessor implements ItemProcessor<Event, List<Gig>> {
 
     GigsFactory gigsFactory = new GigsFactory();
     List<Gig> gigs = new ArrayList<>();

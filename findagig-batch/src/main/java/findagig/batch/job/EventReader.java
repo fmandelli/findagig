@@ -19,7 +19,7 @@ import java.util.Map;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 @Service
-public class GigsReader implements ItemReader<Event> {
+public class EventReader implements ItemReader<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private List<Event> events = new ArrayList<>();
@@ -27,7 +27,7 @@ public class GigsReader implements ItemReader<Event> {
     private Map<String, Integer> metroAreas = new HashMap<>();
     private int page = 0;
 
-    public GigsReader() {
+    public EventReader() {
         driver = new SongKickDriver();
 
         //At this point, only events from the below cities will be collected.
@@ -40,8 +40,6 @@ public class GigsReader implements ItemReader<Event> {
 
     @Override
     public Event read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        return null;
-        /**
         events = readEvents();
         if (!this.events.isEmpty()) {
             return this.events.remove(0);
@@ -54,7 +52,6 @@ public class GigsReader implements ItemReader<Event> {
             }
             return this.events.remove(0);
         }
-         **/
     }
 
 
@@ -62,7 +59,10 @@ public class GigsReader implements ItemReader<Event> {
         metroAreas.forEach((key, value) -> {
             long time = System.currentTimeMillis();
             List<Event> newList = driver.getUpcomingEventsByMetroAreaId(value);
-            logger.info("Events read", keyValue("event", "EVENT_READ"), keyValue("METRO_AREA", key), keyValue("duration", System.currentTimeMillis() - time));
+            logger.info("Events read",
+                    keyValue("event", "EVENT_READ"),
+                    keyValue("METRO_AREA", key),
+                    keyValue("duration", System.currentTimeMillis() - time));
 
             events.addAll(newList);
         });

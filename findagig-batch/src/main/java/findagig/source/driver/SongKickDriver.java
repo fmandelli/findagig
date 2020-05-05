@@ -3,11 +3,9 @@ package findagig.source.driver;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import findagig.batch.domain.entity.Gig;
 import findagig.source.entity.Artist;
 import findagig.source.entity.Event;
@@ -39,6 +37,10 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
  * @version 1.0
  */
 public class SongKickDriver {
+
+    public enum InfoSource {
+        SONG_KICK, KAFKA_TOPIC
+    }
 
     public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://api.songkick.com/api/3.0";
     public static final String SONG_KICK_API_KEY = "EDaoxv9PhlnV2HYy";
@@ -134,13 +136,18 @@ public class SongKickDriver {
             RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.getForObject(uri.toString(), String.class);
 
-            logger.info("Requested locations by name from source.", keyValue("sourceApi", "songKick"), keyValue("sourceApiUrl", uri.toString()));
+            logger.info("Requested locations by name from source.",
+                    keyValue("sourceApi", "songKick"),
+                    keyValue("sourceApiUrl", uri.toString()));
 
             System.out.println(result);
 
             return result;
         } catch (Exception e) {
-            logger.error("Error getting locations from source.", keyValue("sourceApi", "songKick"), keyValue("sourceApiUrl", uri.toString()), keyValue("error", e.toString()));
+            logger.error("Error getting locations from source.",
+                    keyValue("sourceApi", "songKick"),
+                    keyValue("sourceApiUrl", uri.toString()),
+                    keyValue("error", e.toString()));
         }
         return null;
     }
@@ -162,20 +169,77 @@ public class SongKickDriver {
             RestTemplate restTemplate = new RestTemplate();
             String json = restTemplate.getForObject(uri.toString(), String.class);
 
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+            logger.info("Response of upcoming Events by MetroAreaId.",
+                    keyValue("event", "EVENT_HTTP_RESPONSE"),
+                    keyValue("METRO_AREA_ID", metroAreaId),
+                    keyValue("sourceApi", "songKick"),
+                    keyValue("sourceApiUrl", uri.toString()));
 
-            JsonNode node = mapper.readTree(json);
-            List<JsonNode> eventNode = node.findValues("event");
-            //Event[] events = mapper.convertValue(eventNode.get(0), Event[].class);
-            List<Event> events = mapper.convertValue(eventNode.get(0), new TypeReference<List<Event>>() {});
-            logger.info("Response of upcoming Events by MetroAreaId", keyValue("event", "EVENT_HTTP_RESPONSE"), keyValue("METRO_AREA_ID", metroAreaId), keyValue("sourceApi", "songKick"), keyValue("sourceApiUrl", uri.toString()));
-            return events;
+            return transformMany(json);
 
-        } catch (IOException e) {
-            logger.error("Error on getting response of upcoming Events by MetroAreaId", keyValue("event", "EVENT_ERROR"), keyValue("METRO_AREA_ID", metroAreaId), keyValue("sourceApi", "songKick"), keyValue("sourceApiUrl", uri.toString()));
+        } catch (Exception e) {
+            logger.error("Error on getting response of upcoming Events by MetroAreaId.",
+                    keyValue("event", "EVENT_ERROR"),
+                    keyValue("METRO_AREA_ID", metroAreaId),
+                    keyValue("sourceApi", "songKick"),
+                    keyValue("sourceApiUrl", uri.toString()));
         }
         return null;
     }
+
+
+    /**
+     * Transforms a JSON object representing an Event into a FindAGig Event object
+     * @param jsonEventObj represents an Event object in a JSON format
+     * @return List of Event objects
+     */
+    public List<Event> transformMany(String jsonEventObj) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+
+        try {
+            JsonNode node = mapper.readTree(jsonEventObj);
+            List<JsonNode> eventNode = node.findValues("event");
+            List<Event> events = mapper.convertValue(eventNode.get(0), new TypeReference<List<Event>>() {});
+            logger.info("JSON object successfully mapped into Event object.",
+                    keyValue("JSON_OBJECT", jsonEventObj));
+            return events;
+        } catch (JsonMappingException e) {
+            logger.error("Error when mapping JSON object into Event object.",
+                    keyValue("event", "EVENT_ERROR"),
+                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("EXCEPTION", e.toString()));
+        } catch (JsonProcessingException e) {
+            logger.error("Error when processing JSON object.",
+                    keyValue("event", "EVENT_ERROR"),
+                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("EXCEPTION", e.toString()));
+        }
+        return null;
+    }
+
+
+    public Event transformSingle(String jsonEventObj) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+
+        try {
+            Event event = mapper.readValue(jsonEventObj, Event.class);
+            logger.info("JSON object successfully mapped into a single Event object.",
+                    keyValue("JSON_OBJECT", jsonEventObj));
+            return event;
+        } catch (JsonMappingException e) {
+            logger.error("Error when mapping JSON object into a single Event object.",
+                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("EXCEPTION", e.toString()));
+        } catch (JsonProcessingException e) {
+            logger.error("Error when processing JSON object into a single Event object.",
+                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("EXCEPTION", e.toString()));
+        }
+        return null;
+    }
+
 }
