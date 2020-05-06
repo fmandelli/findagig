@@ -22,14 +22,24 @@ public class KafkaProperties {
     @Value("${kafka.cluster.brokers}")
     private List<String> brokers = new ArrayList<>();
 
-    @Value("${kafka.cluster.topic.event}")
-    private String eventTopic;
-
     @Value("${kafka.security.sasl.ssl.security.protocol}")
     private String saslSslSecurityProtocol;
 
     @Value("${kafka.security.scram.sha256.mechanism}")
     private String scramSha256Mechanism;
+
+    @Value("${kafka.stream.topic.event}")
+    private String eventTopic;
+
+    @Value("${kafka.stream.topic.gig}")
+    private String gigTopic;
+
+    @Value("${kafka.stream.app.id}")
+    private String appId;
+
+    @Value("${kafka.stream.client.id}")
+    private String clientId;
+
 
 
     public KafkaProperties() {
@@ -73,6 +83,18 @@ public class KafkaProperties {
 
     public void setSaslSslSecurityProtocol(String saslSslSecurityProtocol) {
         this.saslSslSecurityProtocol = saslSslSecurityProtocol;
+    }
+
+    public String getGigTopic() {
+        return gigTopic;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public String getClientId() {
+        return clientId;
     }
 
     public String getScramSha256Mechanism() {

@@ -22,14 +22,13 @@ import java.util.Map;
 import java.util.Properties;
 
 @Service
-public class EventConsumer {
-
+public class GigConsumer {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final KafkaProperties kafkaProperties;
 
     @Autowired
-    public EventConsumer(KafkaProperties kafkaProperties) {
+    public GigConsumer(KafkaProperties kafkaProperties) {
         this.kafkaProperties = kafkaProperties;
 
         Properties props = new Properties();
@@ -49,7 +48,6 @@ public class EventConsumer {
         startConsumer(props);
     }
 
-
     /**
      * Consumes objects from the Event topic, and then
      * posts them to the Gig topic (after transformation)
@@ -58,20 +56,17 @@ public class EventConsumer {
      */
     public void startConsumer(Properties properties) {
         final StreamsBuilder builder = new StreamsBuilder();
-        GigsFactory factory = new GigsFactory();
 
-        JsonSerde<Event> valueSerde = new JsonSerde();
+        JsonSerde<Gig> valueSerde = new JsonSerde();
         valueSerde.configure(Map.of(JsonDeserializer.TRUSTED_PACKAGES, "findagig.source.entity"), false);
 
         builder.stream(kafkaProperties.getEventTopic(), Consumed.with(Serdes.Long(), valueSerde))
-                .flatMapValues((event) -> factory.createGigs(event))
-                .to(kafkaProperties.getGigTopic(), Produced.with(Serdes.Long(), new JsonSerde<Gig>()));
+                .print(Printed.toSysOut());
 
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
 
-        logger.info("Starting event consumer from topic {} to {} topic", kafkaProperties.getEventTopic(), kafkaProperties.getGigTopic());
+        logger.info("Starting event consumer from topic {} ", kafkaProperties.getGigTopic());
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
-
 }
