@@ -40,22 +40,16 @@ public class EventReader implements ItemReader<Event> {
 
     @Override
     public Event read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        events = readEvents();
-        if (!this.events.isEmpty()) {
-            return this.events.remove(0);
-        } else {
+        if (this.events.isEmpty()) {
             page++;
-            events = readNewEvents(page);
-            if (events.isEmpty()) {
-                page = 0;
+            if (page > 1) // no loop. returns only the first page
                 return null;
-            }
-            return this.events.remove(0);
+            events = readEvents(page);
         }
+        return this.events.remove(0);
     }
 
-
-    private List<Event> readEvents() {
+    private List<Event> readEvents(int fromPage) {
         metroAreas.forEach((key, value) -> {
             long time = System.currentTimeMillis();
             List<Event> newList = driver.getUpcomingEventsByMetroAreaId(value);
@@ -69,15 +63,4 @@ public class EventReader implements ItemReader<Event> {
         return events;
     }
 
-
-    private List<Event> readNewEvents(int fromPage) {
-        long time = System.currentTimeMillis();
-        List<Event> events = driver.getEventsByLocationFromDate("Winnipeg,", LocalDate.now(), fromPage);
-        logger.info("Events page read",
-                keyValue("event", "EVENT_READ"),
-                keyValue("page", fromPage),
-                keyValue("duration", System.currentTimeMillis() - time)
-        );
-        return events;
-    }
 }

@@ -19,14 +19,6 @@ class SongkickDriverTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Test
-    void getEventsByLocationFromDate() {
-        SongKickDriver driver = new SongKickDriver();
-        List<Event> events = driver.getEventsByLocationFromDate("Munchen", LocalDate.now(), 1);
-        assertTrue(events != null);
-    }
-
-
-    @Test
     void getLocationsByName() {
         SongKickDriver driver = new SongKickDriver();
         String json = driver.getLocationsByName("Toronto");
