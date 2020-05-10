@@ -28,10 +28,6 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
  */
 public class SongKickDriver {
 
-    public enum InfoSource {
-        SONG_KICK, KAFKA_TOPIC
-    }
-
     public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://api.songkick.com/api/3.0";
     public static final String SONG_KICK_API_KEY = "EDaoxv9PhlnV2HYy";
     private int maxExecutions = 1;
@@ -77,11 +73,12 @@ public class SongKickDriver {
      * @param metroAreaId is a SongKick MetroAreaId
      * @return List of upcoming Events of a Metro Area
      */
-    public List<Event> getUpcomingEventsByMetroAreaId(long metroAreaId) {
+    public List<Event> getUpcomingEventsByMetroAreaId(long metroAreaId, int pageNumber) {
 
         StringBuilder uri = new StringBuilder(SONG_KICK_ENDPOINT_ADDRESS);
         uri.append("/metro_areas/").append(metroAreaId);
         uri.append("/calendar.json?apikey=").append(SONG_KICK_API_KEY);
+        uri.append("&page=").append(pageNumber);
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -90,8 +87,10 @@ public class SongKickDriver {
             logger.info("Response of upcoming Events by MetroAreaId.",
                     keyValue("event", "EVENT_HTTP_RESPONSE"),
                     keyValue("METRO_AREA_ID", metroAreaId),
+                    keyValue("PAGE_NUMBER", pageNumber),
                     keyValue("sourceApi", "songKick"),
-                    keyValue("sourceApiUrl", uri.toString()));
+                    keyValue("sourceApiUrl", uri.toString()),
+                    keyValue("JSON_OBJECT_RETURNED", json));
 
             return transformMany(json);
 
@@ -100,7 +99,8 @@ public class SongKickDriver {
                     keyValue("event", "EVENT_ERROR"),
                     keyValue("METRO_AREA_ID", metroAreaId),
                     keyValue("sourceApi", "songKick"),
-                    keyValue("sourceApiUrl", uri.toString()));
+                    keyValue("sourceApiUrl", uri.toString()),
+                    keyValue("EXCEPTION", e.toString()));
         }
         return null;
     }
@@ -120,18 +120,18 @@ public class SongKickDriver {
             JsonNode node = mapper.readTree(jsonEventObj);
             List<JsonNode> eventNode = node.findValues("event");
             List<Event> events = mapper.convertValue(eventNode.get(0), new TypeReference<List<Event>>() {});
-            logger.info("JSON object successfully mapped into Event object.",
-                    keyValue("JSON_OBJECT", jsonEventObj));
+            logger.info("JSON object successfully mapped into List of Event objects.",
+                    keyValue("LIST_SIZE", events.size()));
             return events;
         } catch (JsonMappingException e) {
             logger.error("Error when mapping JSON object into Event object.",
                     keyValue("event", "EVENT_ERROR"),
-                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("JSON_OBJECT_NOT_CONVERTED", jsonEventObj),
                     keyValue("EXCEPTION", e.toString()));
         } catch (JsonProcessingException e) {
             logger.error("Error when processing JSON object.",
                     keyValue("event", "EVENT_ERROR"),
-                    keyValue("JSON_OBJECT", jsonEventObj),
+                    keyValue("JSON_OBJECT_NOT_CONVERTED", jsonEventObj),
                     keyValue("EXCEPTION", e.toString()));
         }
         return null;
