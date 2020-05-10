@@ -36,11 +36,13 @@ class SongKickDriverTest {
         pages.forEach(pg -> {
             long metroAreaId = 27403;
             List<Event> winnipegEvents = driver.getUpcomingEventsByMetroAreaId(metroAreaId, pg);
-            logger.info("@Test: Get Events by MetroAreaId",
-                    keyValue("event", "EVENT_TEST"),
-                    keyValue("METRO_AREA_ID", metroAreaId),
-                    keyValue("PAGE_NUMBER", pg));
-            assertTrue(winnipegEvents.get(0).getVenue().getMetroArea().getDisplayName().equalsIgnoreCase("Winnipeg"));
+            if (winnipegEvents != null) {
+                logger.info("@Test: Get Events by MetroAreaId",
+                        keyValue("event", "EVENT_TEST"),
+                        keyValue("METRO_AREA_ID", metroAreaId),
+                        keyValue("PAGE_NUMBER", pg));
+                assertTrue(winnipegEvents.get(0).getVenue().getMetroArea().getDisplayName().equalsIgnoreCase("Winnipeg"));
+            }
         });
 
 
