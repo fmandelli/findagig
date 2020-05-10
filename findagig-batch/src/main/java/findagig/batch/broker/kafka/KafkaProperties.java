@@ -81,9 +81,10 @@ public class KafkaProperties {
     }
 
     public Properties addSecurity(KafkaSecurityProperties securityProperties) {
+        Properties properties = getProperties();
         if (securityProperties != null) {
-            getProperties().putAll(securityProperties.getProperties());
+            properties.putAll(securityProperties.getProperties());
         }
-        return getProperties();
+        return properties;
     }
 }
