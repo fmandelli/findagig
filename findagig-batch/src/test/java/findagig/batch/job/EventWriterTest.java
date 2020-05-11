@@ -2,20 +2,18 @@ package findagig.batch.job;
 
 import findagig.source.entity.Event;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class GigsWriterTest {
+class EventWriterTest {
 
     @Test
     void write() throws Exception {
-        GigsReader reader = new GigsReader();
-        GigsWriter writer = new GigsWriter();
+        EventReader reader = new EventReader();
+        EventWriter writer = new EventWriter();
         Event event = reader.read();
         List<Event> list = new ArrayList<>();
         list.add(event);

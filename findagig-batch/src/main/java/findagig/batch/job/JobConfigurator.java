@@ -22,10 +22,10 @@ public class JobConfigurator {
     public StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private GigsReader gigsReader;
+    private EventReader eventReader;
 
     @Autowired
-    private GigsWriter gigsWriter;
+    private EventWriter eventWriter;
 
     @Bean
     public Job processJob() {
@@ -38,9 +38,9 @@ public class JobConfigurator {
     public Step orderStep1() {
         return stepBuilderFactory.get("orderStep1").<Event, Event>chunk(1)
         //return stepBuilderFactory.get("orderStep1").<Event, List<Gig>>chunk(1)
-                .reader(gigsReader)
+                .reader(eventReader)
                 //.processor(new GigsProcessor())
-                .writer(gigsWriter).build();
+                .writer(eventWriter).build();
     }
 
     @Bean

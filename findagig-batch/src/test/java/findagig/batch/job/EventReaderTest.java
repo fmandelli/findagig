@@ -3,16 +3,15 @@ package findagig.batch.job;
 import findagig.source.entity.Event;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class GigsReaderTest {
+class EventReaderTest {
 
     @Test
-    void read() throws Exception {
-        GigsReader reader = new GigsReader();
+    void readSingleEvent() throws Exception {
+        EventReader reader = new EventReader();
         Event event = reader.read();
         assertTrue(event != null);
     }
+
 }

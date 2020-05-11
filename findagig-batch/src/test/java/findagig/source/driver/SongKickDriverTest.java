@@ -10,21 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 import static org.junit.Assert.assertTrue;
 
-class SongkickDriverTest {
+class SongKickDriverTest {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Test
-    void getEventsByLocationFromDate() {
-        SongKickDriver driver = new SongKickDriver();
-        List<Event> events = driver.getEventsByLocationFromDate("Munchen", LocalDate.now(), 1);
-        assertTrue(events != null);
-    }
-
 
     @Test
     void getLocationsByName() {
@@ -37,9 +31,21 @@ class SongkickDriverTest {
     @Test
     void getUpcomingEventsByMetroAreaId() {
         SongKickDriver driver = new SongKickDriver();
-        List<Event> winnipegEvents = driver.getUpcomingEventsByMetroAreaId(27403);
-        logger.info("@Test: Get Events by MetroAreaId", keyValue("event", "EVENT_TEST"));
-        assertTrue(winnipegEvents.get(0).getVenue().getMetroArea().getDisplayName().equalsIgnoreCase("Winnipeg"));
+        List<Integer> pages = Stream.of(1, 2, 3, 4, 5).collect(Collectors.toList());
+
+        pages.forEach(pg -> {
+            long metroAreaId = 27403;
+            List<Event> winnipegEvents = driver.getUpcomingEventsByMetroAreaId(metroAreaId, pg);
+            if (winnipegEvents != null) {
+                logger.info("@Test: Get Events by MetroAreaId",
+                        keyValue("event", "EVENT_TEST"),
+                        keyValue("METRO_AREA_ID", metroAreaId),
+                        keyValue("PAGE_NUMBER", pg));
+                assertTrue(winnipegEvents.get(0).getVenue().getMetroArea().getDisplayName().equalsIgnoreCase("Winnipeg"));
+            }
+        });
+
+
     }
 
 }

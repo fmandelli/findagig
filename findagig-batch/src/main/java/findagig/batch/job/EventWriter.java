@@ -13,14 +13,14 @@ import java.util.List;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 @Service
-public class GigsWriter implements ItemWriter<Event> {
+public class EventWriter implements ItemWriter<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private EventProducer eventProducer;
 
-    public GigsWriter() {
+    public EventWriter() {
     }
 
     @Override

@@ -9,6 +9,7 @@ import findagig.source.entity.Event;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GigsFactory {
 
@@ -21,7 +22,6 @@ public class GigsFactory {
     public List<Gig> createGigs(Event event) {
 
         List<Gig> gigs = new ArrayList<>();
-
 
         event.getPerformance().forEach(artist -> {
             Gig gig = new Gig();
@@ -40,8 +40,20 @@ public class GigsFactory {
             }
             gigs.add(gig);
         });
-
         return gigs;
+    }
+
+
+    /**
+     * Creates a List of Gig objects from a List of Event objects
+     * @param events List of Event objects
+     * @return List of Gig objects
+     */
+    public List<Gig> createGigs(List<Event> events) {
+        return events.stream()
+                .map(ev -> createGigs(ev))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
 
