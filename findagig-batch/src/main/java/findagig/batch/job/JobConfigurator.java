@@ -1,6 +1,6 @@
 package findagig.batch.job;
 
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;

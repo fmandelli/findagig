@@ -1,7 +1,7 @@
 package findagig.batch.job;
 
 import findagig.batch.broker.kafka.EventProducer;
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;

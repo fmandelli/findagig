@@ -3,12 +3,8 @@ package findagig.batch.broker.kafka;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
-import org.springframework.stereotype.Component;
-import scala.sys.Prop;
 
 import java.util.ArrayList;
 import java.util.List;

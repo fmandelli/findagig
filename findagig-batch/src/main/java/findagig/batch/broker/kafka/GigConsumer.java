@@ -37,7 +37,7 @@ public class GigConsumer {
         final StreamsBuilder builder = new StreamsBuilder();
 
         JsonSerde<Gig> valueSerde = new JsonSerde();
-        valueSerde.configure(Map.of(JsonDeserializer.TRUSTED_PACKAGES, "findagig.source.entity"), false);
+        valueSerde.configure(Map.of(JsonDeserializer.TRUSTED_PACKAGES, "findagig.batch.source.entity"), false);
 
         builder.stream(kafkaProperties.getEventTopic(), Consumed.with(Serdes.Long(), valueSerde))
                 .print(Printed.toSysOut());

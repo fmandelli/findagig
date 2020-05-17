@@ -4,11 +4,10 @@ import findagig.batch.domain.entity.Artist;
 import findagig.batch.domain.entity.Gig;
 import findagig.batch.domain.entity.Location;
 import findagig.batch.domain.entity.Venue;
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GigsFactory {
@@ -62,7 +61,7 @@ public class GigsFactory {
      * @param sourceArtist is an Artist object that exists within an Event object
      * @return an Artist object belonging to the FindAGig API
      */
-    private Artist createArtist(findagig.source.entity.Artist sourceArtist) {
+    private Artist createArtist(findagig.batch.source.entity.Artist sourceArtist) {
         Artist artist = new Artist();
         artist.setId(sourceArtist.getId());
         artist.setDisplayName(sourceArtist.getDisplayName());
@@ -78,7 +77,7 @@ public class GigsFactory {
      * @param sourceVenue is a Venue object that exists within an Event object
      * @return a Venue object to be used within the FindAGig API
      */
-    private Venue createVenue(findagig.source.entity.Venue sourceVenue) {
+    private Venue createVenue(findagig.batch.source.entity.Venue sourceVenue) {
         Venue venue = new Venue();
         venue.setId(sourceVenue.getId() != null ? sourceVenue.getId() : 0);
         venue.setDescription("");

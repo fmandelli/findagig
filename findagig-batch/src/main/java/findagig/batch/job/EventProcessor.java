@@ -2,7 +2,7 @@ package findagig.batch.job;
 
 import findagig.batch.domain.entity.Gig;
 import findagig.batch.domain.factory.GigsFactory;
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
-package findagig.source.entity;
+package findagig.batch.source.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Event {

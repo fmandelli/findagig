@@ -1,4 +1,4 @@
-package findagig.source.entity;
+package findagig.batch.source.entity;
 
 public class Artist {
     private Long id;

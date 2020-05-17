@@ -1,19 +1,17 @@
-package findagig.source.driver;
+package findagig.batch.source.driver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
-import findagig.source.entity.Artist;
-import findagig.source.entity.Event;
-import findagig.source.entity.Venue;
+import findagig.batch.source.properties.SongKickProperties;
+import findagig.batch.source.entity.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
@@ -26,30 +24,33 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
  * @author Diego Irismar da Costa, Flavio A. Mandelli
  * @version 1.0
  */
+@Service
 public class SongKickDriver {
 
-    public static final String SONG_KICK_ENDPOINT_ADDRESS = "https://api.songkick.com/api/3.0";
-    public static final String SONG_KICK_API_KEY = "EDaoxv9PhlnV2HYy";
-    private int maxExecutions = 1;
+    @Autowired
+    private SongKickProperties songKickProperties;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     /**
+     *
      * Search for locations by name using full text search
      *
      * @param locationName is the name of a city. Example of how this information should
      *                     be provided: Winnipeg, London, San+Francisco
+     * @param pageNumber page number being requested
      * @return it is TEMPORARILY returning a String containing a Response from SongKick API
      */
-    public String getLocationsByName(String locationName) {
+    public String getLocationsByName(String locationName, int pageNumber) {
 
-        StringBuilder uri = new StringBuilder(SONG_KICK_ENDPOINT_ADDRESS);
-        uri.append("/search/locations.json?query=").append(locationName);
-        uri.append("&apikey=").append(SONG_KICK_API_KEY);
+        String uri = songKickProperties.getSearchByLocationNameURL()
+                .replace("{location_name}", locationName)
+                .replace("{pageNum}", String.valueOf(pageNumber));
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(uri.toString(), String.class);
+            String result = restTemplate.getForObject(uri, String.class);
 
             logger.info("Requested locations by name from source.",
                     keyValue("sourceApi", "songKick"),
@@ -75,14 +76,13 @@ public class SongKickDriver {
      */
     public List<Event> getUpcomingEventsByMetroAreaId(long metroAreaId, int pageNumber) {
 
-        StringBuilder uri = new StringBuilder(SONG_KICK_ENDPOINT_ADDRESS);
-        uri.append("/metro_areas/").append(metroAreaId);
-        uri.append("/calendar.json?apikey=").append(SONG_KICK_API_KEY);
-        uri.append("&page=").append(pageNumber);
+        String uri = songKickProperties.getUpcomingEventsByMetroAreaIdURL()
+                .replace("{metro_area_id}", String.valueOf(metroAreaId))
+                .replace("{pageNum}", String.valueOf(pageNumber));
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String json = restTemplate.getForObject(uri.toString(), String.class);
+            String json = restTemplate.getForObject(uri, String.class);
 
             logger.info("Response of upcoming Events by MetroAreaId.",
                     keyValue("event", "EVENT_HTTP_RESPONSE"),
