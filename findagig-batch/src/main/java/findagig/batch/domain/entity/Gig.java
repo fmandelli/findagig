@@ -1,5 +1,7 @@
 package findagig.batch.domain.entity;
 
+import findagig.batch.source.entity.MusicBrainz;
+
 import java.time.LocalDateTime;
 
 /**
@@ -13,12 +15,13 @@ public class Gig {
     private long id;
     private String sourceURI;
     private String displayName;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private String status;
     private String type;
     private Artist artist;
     private Venue venue;
+
 
     public long getId() {
         return id;
@@ -44,19 +47,19 @@ public class Gig {
         this.displayName = displayName;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
+    public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(LocalDateTime endDateTime) {
+    public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
 
@@ -92,14 +95,15 @@ public class Gig {
         this.venue = venue;
     }
 
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Gig{");
         sb.append("id=").append(id);
         sb.append(", sourceURI='").append(sourceURI).append('\'');
         sb.append(", displayName='").append(displayName).append('\'');
-        sb.append(", startDateTime=").append(startDateTime);
-        sb.append(", endDateTime=").append(endDateTime);
+        sb.append(", startDateTime='").append(startDateTime).append('\'');
+        sb.append(", endDateTime='").append(endDateTime).append('\'');
         sb.append(", status='").append(status).append('\'');
         sb.append(", type='").append(type).append('\'');
         sb.append(", artist=").append(artist);
@@ -107,5 +111,4 @@ public class Gig {
         sb.append('}');
         return sb.toString();
     }
-
 }

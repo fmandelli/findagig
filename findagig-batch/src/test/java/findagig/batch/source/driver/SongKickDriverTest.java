@@ -2,6 +2,7 @@ package findagig.batch.source.driver;
 
 import findagig.batch.source.driver.SongKickDriver;
 import findagig.batch.source.entity.Event;
+import findagig.batch.source.entity.Venue;
 import findagig.batch.source.properties.SongKickProperties;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -71,5 +72,4 @@ class SongKickDriverTest {
                 () -> assertTrue(url.contains(parameters.get(1).toString()))
         );
     }
-
 }

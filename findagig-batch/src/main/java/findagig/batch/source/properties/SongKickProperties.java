@@ -18,6 +18,12 @@ public class SongKickProperties {
     @Value("${songkick.api.url.location.nameSearch}")
     private String searchByLocationNameURL;
 
+    @Value("${songkick.api.url.venue.nameSearch}")
+    private String searchVenueByNameURL;
+
+    @Value("${songkick.api.url.venue.idSearch}")
+    private String searchVenueByIdURL;
+
 
     public SongKickProperties() {}
 
@@ -38,6 +44,14 @@ public class SongKickProperties {
         return searchByLocationNameURL;
     }
 
+    public String getSearchVenueByNameURL() {
+        return searchVenueByNameURL;
+    }
+
+    public String getSearchVenueByIdURL() {
+        return searchVenueByIdURL;
+    }
+
 
     @Override
     public String toString() {
@@ -46,6 +60,8 @@ public class SongKickProperties {
         sb.append(", apiKey='").append(apiKey).append('\'');
         sb.append(", upcomingEventsByMetroAreaIdURL='").append(upcomingEventsByMetroAreaIdURL).append('\'');
         sb.append(", searchByLocationNameURL='").append(searchByLocationNameURL).append('\'');
+        sb.append(", searchVenueByNameURL='").append(searchVenueByNameURL).append('\'');
+        sb.append(", searchVenueByIdURL='").append(searchVenueByIdURL).append('\'');
         sb.append('}');
         return sb.toString();
     }

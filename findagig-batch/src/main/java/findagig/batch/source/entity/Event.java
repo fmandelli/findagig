@@ -7,25 +7,49 @@ public class Event {
     private Type type;
     private String uri;
     private String displayName;
-    private List<Artist> performance;
+    private List<Performance> performance;
     private Venue venue;
     private Status status;
+    private Schedule start;
 
-    /*
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    public class Schedule {
+        private String date;
+        private String time;
 
+        public String getDate() {
+            return date;
+        }
 
-     */
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("Schedule{");
+            sb.append("date='").append(date).append('\'');
+            sb.append(", time='").append(time).append('\'');
+            sb.append('}');
+            return sb.toString();
+        }
+    }
 
     public enum Status {
         OK, CANCELLED, POSTPONED
     }
 
-
     public enum Type {
         CONCERT, FESTIVAL
     }
+
 
     public Long getId() {
         return id;
@@ -59,11 +83,11 @@ public class Event {
         this.displayName = displayName;
     }
 
-    public List<Artist> getPerformance() {
+    public List<Performance> getPerformance() {
         return performance;
     }
 
-    public void setPerformance(List<Artist> performance) {
+    public void setPerformance(List<Performance> performance) {
         this.performance = performance;
     }
 
@@ -83,6 +107,15 @@ public class Event {
         this.status = status;
     }
 
+    public Schedule getStart() {
+        return start;
+    }
+
+    public void setStart(Schedule start) {
+        this.start = start;
+    }
+
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Event{");
@@ -93,6 +126,7 @@ public class Event {
         sb.append(", performance=").append(performance);
         sb.append(", venue=").append(venue);
         sb.append(", status=").append(status);
+        sb.append(", start=").append(start);
         sb.append('}');
         return sb.toString();
     }

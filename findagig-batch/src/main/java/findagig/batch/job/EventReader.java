@@ -2,6 +2,7 @@ package findagig.batch.job;
 
 import findagig.batch.source.driver.SongKickDriver;
 import findagig.batch.source.entity.Event;
+import findagig.batch.source.entity.Venue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
