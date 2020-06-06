@@ -1,21 +1,27 @@
 package findagig.batch.job;
 
-import findagig.batch.domain.entity.Gig;
-import findagig.batch.domain.factory.GigsFactory;
-import findagig.source.entity.Event;
+import findagig.batch.source.driver.SongKickDriver;
+import findagig.batch.source.entity.Event;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+@Service
+public class EventProcessor implements ItemProcessor<Event, Event> {
 
-public class EventProcessor implements ItemProcessor<Event, List<Gig>> {
-
-    GigsFactory gigsFactory = new GigsFactory();
-    List<Gig> gigs = new ArrayList<>();
+    @Autowired
+    SongKickDriver songKickDriver;
 
     @Override
-    public List<Gig> process(Event event) throws Exception {
-        this.gigs = this.gigsFactory.createGigs(event);
-        return this.gigs;
+    public Event process(Event event) throws Exception {
+        /* In a few cases Venue.ID is NULL at source (SongKick) */
+        if (event.getVenue().getId() != null) {
+            /* This is necessary because Venue information is incomplete when
+             * provided by SongKick and set as a child node.
+             * That issue is fixed by getting the current Venue ID and making
+             * a new request to the SongKick API to get an updated Venue object */
+            event.setVenue(this.songKickDriver.getVenueById(event.getVenue().getId()));
+        }
+        return event;
     }
 }

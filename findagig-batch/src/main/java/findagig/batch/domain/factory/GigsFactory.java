@@ -4,12 +4,13 @@ import findagig.batch.domain.entity.Artist;
 import findagig.batch.domain.entity.Gig;
 import findagig.batch.domain.entity.Location;
 import findagig.batch.domain.entity.Venue;
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
+import findagig.batch.source.entity.Performance;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GigsFactory {
 
@@ -22,18 +23,24 @@ public class GigsFactory {
     public List<Gig> createGigs(Event event) {
 
         List<Gig> gigs = new ArrayList<>();
+        Stream<Performance> performances = event.getPerformance().stream();
 
-        event.getPerformance().forEach(artist -> {
+        performances.forEach(performance -> {
             Gig gig = new Gig();
-            gig.setId(event.getId());
+            findagig.batch.source.entity.Artist srcArtist = performance.getArtist();
+
+            /* Gig ID needs to be set as Performance ID, otherwise two or more
+               Artists performing in the same Event would generate duplicated Gig ID
+               (in case Event ID was used to set Gig ID) */
+            gig.setId(performance.getId());
             gig.setSourceURI(event.getUri());
             gig.setDisplayName(event.getDisplayName());
-            //gig.setStartDateTime(event.getStartDateTime());
+            gig.setStartDateTime(event.getStart().getDate() + " " + event.getStart().getTime());
             //gig.setEndDateTime(event.getEndDateTime());
             gig.setStatus(event.getStatus().toString());
             gig.setType(event.getType().toString());
 
-            gig.setArtist(this.createArtist(artist));
+            gig.setArtist(this.createArtist(srcArtist));
 
             if (event.getVenue() != null) {
                 gig.setVenue(this.createVenue(event.getVenue()));
@@ -62,13 +69,14 @@ public class GigsFactory {
      * @param sourceArtist is an Artist object that exists within an Event object
      * @return an Artist object belonging to the FindAGig API
      */
-    private Artist createArtist(findagig.source.entity.Artist sourceArtist) {
+    private Artist createArtist(findagig.batch.source.entity.Artist sourceArtist) {
         Artist artist = new Artist();
         artist.setId(sourceArtist.getId());
         artist.setDisplayName(sourceArtist.getDisplayName());
         artist.setSummary("");
         artist.setWebsite("");
         artist.setSourceURI(sourceArtist.getUri());
+        artist.setMusicBrainzs(sourceArtist.getIdentifier());
         return artist;
     }
 
@@ -78,14 +86,14 @@ public class GigsFactory {
      * @param sourceVenue is a Venue object that exists within an Event object
      * @return a Venue object to be used within the FindAGig API
      */
-    private Venue createVenue(findagig.source.entity.Venue sourceVenue) {
+    private Venue createVenue(findagig.batch.source.entity.Venue sourceVenue) {
         Venue venue = new Venue();
         venue.setId(sourceVenue.getId() != null ? sourceVenue.getId() : 0);
-        venue.setDescription("");
+        venue.setDescription(sourceVenue.getDescription());
         venue.setDisplayName(sourceVenue.getDisplayName());
-        //venue.setWebsite(sourceVenue.getWebsite());
-        //venue.setStreet(sourceVenue.getStreet());
-        //venue.setZipCode(sourceVenue.getZip());
+        venue.setWebsite(sourceVenue.getWebsite());
+        venue.setStreet(sourceVenue.getStreet());
+        venue.setZipCode(sourceVenue.getZip());
         venue.setLatitude(sourceVenue.getLat());
         venue.setLongitude(sourceVenue.getLng());
         venue.setSourceURI(sourceVenue.getUri());

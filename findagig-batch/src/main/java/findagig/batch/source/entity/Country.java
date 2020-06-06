@@ -1,6 +1,6 @@
-package findagig.source.entity;
+package findagig.batch.source.entity;
 
-public class State {
+public class Country {
 
     private String displayName;
 
@@ -15,7 +15,7 @@ public class State {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("State{");
+        final StringBuilder sb = new StringBuilder("Country{");
         sb.append("displayName='").append(displayName).append('\'');
         sb.append('}');
         return sb.toString();

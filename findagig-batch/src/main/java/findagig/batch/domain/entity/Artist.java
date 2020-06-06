@@ -1,11 +1,12 @@
 package findagig.batch.domain.entity;
 
 import findagig.batch.domain.vo.MusicStyle;
+import findagig.batch.source.entity.MusicBrainz;
 
 import java.util.List;
 
 /**
- * Artist is a Entity/Bean class that represents an Artist on "Find a Gig" database
+ * Class that represents an Artist on the "Find a Gig" API
  *
  * @author Flavio A. Mandelli and Diego Irismar da Costa
  * @version 1.0
@@ -18,6 +19,7 @@ public class Artist {
     private String summary;
     private List<MusicStyle> musicStyles;
     private String sourceURI;
+    private List<MusicBrainz> musicBrainzs;
 
 
     public long getId() {
@@ -68,6 +70,14 @@ public class Artist {
         this.sourceURI = sourceURI;
     }
 
+    public List<MusicBrainz> getMusicBrainzs() {
+        return musicBrainzs;
+    }
+
+    public void setMusicBrainzs(List<MusicBrainz> musicBrainzs) {
+        this.musicBrainzs = musicBrainzs;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Artist{");
@@ -77,6 +87,7 @@ public class Artist {
         sb.append(", summary='").append(summary).append('\'');
         sb.append(", musicStyles=").append(musicStyles);
         sb.append(", sourceURI='").append(sourceURI).append('\'');
+        sb.append(", musicBrainzs=").append(musicBrainzs);
         sb.append('}');
         return sb.toString();
     }

@@ -2,7 +2,7 @@ package findagig.batch.broker.kafka;
 
 import findagig.batch.domain.entity.Gig;
 import findagig.batch.domain.factory.GigsFactory;
-import findagig.source.entity.Event;
+import findagig.batch.source.entity.Event;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -44,7 +44,7 @@ public class EventConsumer {
         GigsFactory factory = new GigsFactory();
 
         JsonSerde<Event> valueSerde = new JsonSerde();
-        valueSerde.configure(Map.of(JsonDeserializer.TRUSTED_PACKAGES, "findagig.source.entity"), false);
+        valueSerde.configure(Map.of(JsonDeserializer.TRUSTED_PACKAGES, "findagig.batch.source.entity"), false);
 
         builder.stream(kafkaProperties.getEventTopic(), Consumed.with(Serdes.Long(), valueSerde))
                 .flatMapValues((event) -> {
