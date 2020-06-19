@@ -2,25 +2,67 @@ package findagig.batch.job;
 
 import findagig.batch.source.driver.SongKickDriver;
 import findagig.batch.source.entity.Event;
-import findagig.batch.source.properties.SongKickProperties;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
-@SpringBootTest(classes = {EventReader.class, SongKickDriver.class, SongKickProperties.class})
-@ActiveProfiles("local")
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
 class EventReaderTest {
 
-    @Autowired
-    private EventReader eventReader;
+    @InjectMocks
+    private EventReader eventReader = new EventReader();
+
+    @Mock
+    private SongKickDriver driver;
 
     @Test
-    void readSingleEvent() throws Exception {
-        Event event = eventReader.read();
-        assertTrue(event != null);
+    void noEvents() throws Exception {
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 1)).thenReturn(new ArrayList<>());
+
+        assertNull(eventReader.read());
+
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 1);
+    }
+
+    @Test
+    void onePageResults() throws Exception {
+        Event event = new Event();
+
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 1)).thenReturn(Collections.singletonList(event));
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 2)).thenReturn(new ArrayList<>());
+
+        assertNotNull(eventReader.read());
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 1);
+
+        assertNull(eventReader.read());
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 2);
+    }
+
+    @Test
+    void twoPageResults() throws Exception {
+
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 1)).thenReturn(Collections.singletonList(new Event()));
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 2)).thenReturn(Collections.singletonList(new Event()));
+        when(driver.getUpcomingEventsByMetroAreaId(27403L, 3)).thenReturn(new ArrayList<>());
+
+        assertNotNull(eventReader.read());
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 1);
+
+        assertNotNull(eventReader.read());
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 2);
+
+        assertNull(eventReader.read());
+        verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 3);
     }
 
 }

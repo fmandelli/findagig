@@ -1,8 +1,7 @@
 package findagig.batch.source.driver;
 
-import findagig.batch.source.driver.SongKickDriver;
 import findagig.batch.source.entity.Event;
-import findagig.batch.source.entity.Venue;
+import findagig.batch.source.entity.MetroArea;
 import findagig.batch.source.properties.SongKickProperties;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -17,12 +16,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = {SongKickProperties.class, SongKickDriver.class})
 @ActiveProfiles("local")
-class SongKickDriverTest {
+class SongKickDriverITTest {
 
     @Autowired
     SongKickProperties songKickProperties;
@@ -32,13 +31,11 @@ class SongKickDriverTest {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
     @Test
     void getLocationsByName() {
-        String json = songKickDriver.getLocationsByName("Toronto", 1);
-        assertTrue(json.length() > 0);
+        List<MetroArea> metroAreas = songKickDriver.getLocationsByName("Toronto");
+        assertTrue(metroAreas.size() > 0);
     }
-
 
     @Test
     void getUpcomingEventsByMetroAreaId() {
