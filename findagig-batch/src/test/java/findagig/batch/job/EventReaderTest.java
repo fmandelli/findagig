@@ -28,9 +28,7 @@ class EventReaderTest {
     @Test
     void noEvents() throws Exception {
         when(driver.getUpcomingEventsByMetroAreaId(27403L, 1)).thenReturn(new ArrayList<>());
-
         assertNull(eventReader.read());
-
         verify(driver, times(1)).getUpcomingEventsByMetroAreaId(27403L, 1);
     }
 
