@@ -3,30 +3,45 @@ package findagig.batch.job;
 import findagig.batch.source.driver.SongKickDriver;
 import findagig.batch.source.entity.Event;
 import findagig.batch.source.entity.Venue;
-import findagig.batch.source.properties.SongKickProperties;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {EventProcessor.class, SongKickDriver.class, SongKickProperties.class})
-@ActiveProfiles("local")
-class EventProcessorTest {
+@ExtendWith(MockitoExtension.class)
+public class EventProcessorTest {
 
-    @Autowired
-    EventProcessor eventProcessor;
+    @InjectMocks
+    private EventProcessor processor = new EventProcessor();
+
+    @Mock
+    private SongKickDriver driver;
 
     @Test
-    void getUpdatedEventVenueFromSource() throws Exception {
-        Event before = new Event();
-        Venue venue = new Venue();
-        venue.setId(30032L);
-        before.setVenue(venue);
-        Event after = eventProcessor.process(before);
-        assertTrue(after.getVenue().getId().equals(before.getVenue().getId()));
-        assertTrue(after.getVenue().getZip().matches("R3B 2H2"));
-    }
+    void processEventContainingVenueMissingInformation() throws Exception {
+        String displayName = "DISPLAY-NAME-TEST";
 
+        Venue oldVenue = new Venue();
+        oldVenue.setId(3050414L);
+        oldVenue.setDisplayName("");
+
+        Venue newVenue = new Venue();
+        newVenue.setId(oldVenue.getId());
+        newVenue.setDisplayName(displayName);
+
+        Event event = new Event();
+        event.setId(1L);
+        event.setVenue(oldVenue);
+
+        when(driver.getVenueById(oldVenue.getId())).thenReturn(newVenue);
+        event = processor.process(event);
+
+        Assert.assertNotEquals(event.getVenue().getDisplayName(), oldVenue.getDisplayName());
+        Assert.assertThat(event.getVenue().getDisplayName(), Matchers.containsString(displayName));
+    }
 }
