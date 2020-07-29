@@ -27,16 +27,16 @@ public class EventReader implements ItemReader<Event> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private List<Event> events = new ArrayList<>();
-    private Map<String, Integer> metroAreas = new HashMap<>();
+    private Map<String, Long> metroAreas = new HashMap<>();
     private int page = 0;
 
     public EventReader() {
         //At this point, only events from the below cities will be collected.
         //The HashMap below contains a key/value of City and MetroAreaId
-        this.metroAreas.put("WINNIPEG", 27403);
-        //this.metroAreas.put("TORONTO", 27396);
-        //this.metroAreas.put("VANCOUVER", 27398);
-        //this.metroAreas.put("MUNICH", 28549);
+        this.metroAreas.put("WINNIPEG", 27403L);
+        //this.metroAreas.put("TORONTO", 27396L);
+        //this.metroAreas.put("VANCOUVER", 27398L);
+        //this.metroAreas.put("MUNICH", 28549L);
     }
 
     @Override
