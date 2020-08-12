@@ -58,11 +58,10 @@ class SongKickDriverITTest {
 
     @Test
     void validateURLStringSubstitution() {
-        List<Integer> parameters = Arrays.asList(2525, 7);
+        List<Object> parameters = Arrays.asList(2525L, 7);
 
-        String url = songKickProperties.getUpcomingEventsByMetroAreaIdURL()
-                .replace("{metro_area_id}", String.valueOf(parameters.get(0)))
-                .replace("{pageNum}", String.valueOf(parameters.get(1)));
+        String url = songKickProperties
+                .getUpcomingEventsByMetroAreaIdURL((Long)parameters.get(0), (Integer)parameters.get(1));
 
         assertAll("parameters",
                 () -> assertTrue(url.contains(parameters.get(0).toString())),

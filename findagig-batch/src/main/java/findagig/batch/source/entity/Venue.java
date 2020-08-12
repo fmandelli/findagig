@@ -1,5 +1,7 @@
 package findagig.batch.source.entity;
 
+import java.util.Objects;
+
 public class Venue {
     private Long id;
     private String displayName;
@@ -127,5 +129,30 @@ public class Venue {
         sb.append(", metroArea=").append(metroArea);
         sb.append('}');
         return sb.toString();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Venue venue = (Venue) o;
+        return Objects.equals(id, venue.id) &&
+                Objects.equals(displayName, venue.displayName) &&
+                Objects.equals(uri, venue.uri) &&
+                Objects.equals(street, venue.street) &&
+                Objects.equals(zip, venue.zip) &&
+                Objects.equals(lng, venue.lng) &&
+                Objects.equals(lat, venue.lat) &&
+                Objects.equals(phone, venue.phone) &&
+                Objects.equals(website, venue.website) &&
+                Objects.equals(capacity, venue.capacity) &&
+                Objects.equals(description, venue.description) &&
+                Objects.equals(metroArea, venue.metroArea);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, displayName, uri, street, zip, lng, lat, phone, website, capacity, description, metroArea);
     }
 }
