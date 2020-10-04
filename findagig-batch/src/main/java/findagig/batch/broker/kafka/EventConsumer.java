@@ -22,23 +22,25 @@ import java.util.Properties;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
-@Service
 public class EventConsumer {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     private KafkaProperties kafkaProperties;
 
-    @Autowired(required = false)
     private KafkaSecurityProperties securityProperties;
+
+    public EventConsumer(KafkaProperties kafkaProperties, KafkaSecurityProperties securityProperties) {
+        this.kafkaProperties = kafkaProperties;
+        this.securityProperties = securityProperties;
+    }
 
     /**
      * Consumes objects from the Event topic, and then
      * posts them to the Gig topic (after transformation)
      */
-    @PostConstruct
     public void startConsumer() {
+        logger.info("Starting EventConsumer ...");
         Properties properties = kafkaProperties.addSecurity(securityProperties);
         final StreamsBuilder builder = new StreamsBuilder();
         GigsFactory factory = new GigsFactory();
@@ -60,6 +62,7 @@ public class EventConsumer {
                             return gigs;
                         }
                 )
+                .filter((aLong, gig) -> true)
                 .to(kafkaProperties.getGigTopic(), Produced.with(Serdes.Long(), new JsonSerde<Gig>()));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
