@@ -31,8 +31,8 @@ class SongKickPropertiesTest {
 
     @Test
     void validateURLs() {
-        List<String> urls = Arrays.asList(properties.getSearchByLocationNameURL(),
-                                          properties.getUpcomingEventsByMetroAreaIdURL());
+        List<String> urls = Arrays.asList(properties.getSearchByLocationNameURL("x", 1),
+                                          properties.getUpcomingEventsByMetroAreaIdURL(1L, 1));
         assertAll("urls",
                 () -> assertTrue(urls.get(0).startsWith(properties.getEndpointAddress())),
                 () -> assertTrue(urls.get(0).contains(properties.getApiKey())),

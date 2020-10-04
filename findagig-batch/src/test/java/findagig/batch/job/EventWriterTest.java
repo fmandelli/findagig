@@ -1,40 +1,22 @@
 package findagig.batch.job;
 
 import findagig.batch.broker.kafka.EventProducer;
-import findagig.batch.broker.kafka.KafkaProperties;
-import findagig.batch.source.driver.SongKickDriver;
-import findagig.batch.source.entity.Event;
-import findagig.batch.source.properties.SongKickProperties;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-
-@SpringBootTest(classes = {EventReader.class,
-                           EventWriter.class,
-                           SongKickDriver.class,
-                           SongKickProperties.class,
-                           EventProducer.class,
-                           KafkaProperties.class})
-@ActiveProfiles("local")
+@ExtendWith(MockitoExtension.class)
 class EventWriterTest {
 
-    @Autowired
-    EventReader eventReader;
+    @InjectMocks
+    private EventWriter eventWriter;
 
-    @Autowired
-    EventWriter eventWriter;
+    @Mock
+    private EventProducer eventProducer;
 
     @Test
     void write() throws Exception {
-        Event event = eventReader.read();
-        List<Event> list = new ArrayList<>();
-        list.add(event);
-        assertAll(() -> eventWriter.write(list));
     }
 }
