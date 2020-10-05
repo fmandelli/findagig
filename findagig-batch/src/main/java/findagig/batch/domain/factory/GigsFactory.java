@@ -6,20 +6,31 @@ import findagig.batch.domain.entity.Location;
 import findagig.batch.domain.entity.Venue;
 import findagig.batch.source.entity.Event;
 import findagig.batch.source.entity.Performance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static net.logstash.logback.argument.StructuredArguments.keyValue;
+
 public class GigsFactory {
 
     /**
      * Creates a List of Gigs from an Event object
+     *
      * @param event is an Event that FindAGig API is consuming
      *              information from in order to create Gigs
      * @return a List of Gigs
      */
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public List<Gig> createGigs(Event event) {
 
         List<Gig> gigs = new ArrayList<>();
@@ -35,8 +46,7 @@ public class GigsFactory {
             gig.setId(performance.getId());
             gig.setSourceURI(event.getUri());
             gig.setDisplayName(event.getDisplayName());
-            gig.setStartDateTime(event.getStart().getDate() + " " + event.getStart().getTime());
-            //gig.setEndDateTime(event.getEndDateTime());
+            gig.setStartDateTime(convertStartDateTime(event));
             gig.setStatus(event.getStatus().toString());
             gig.setType(event.getType().toString());
 
@@ -46,13 +56,21 @@ public class GigsFactory {
                 gig.setVenue(this.createVenue(event.getVenue()));
             }
             gigs.add(gig);
+
         });
         return gigs;
     }
 
+    private LocalDateTime convertStartDateTime(Event event) {
+        return LocalDateTime
+                .parse(event.getStart().getDate() + "T" +
+                                (event.getStart().getTime() == null ? "00:00" : event.getStart().getTime()),
+                        DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
 
     /**
      * Creates a List of Gig objects from a List of Event objects
+     *
      * @param events List of Event objects
      * @return List of Gig objects
      */
@@ -66,6 +84,7 @@ public class GigsFactory {
 
     /**
      * Creates an Artist object (FindAGig API) from an Event object
+     *
      * @param sourceArtist is an Artist object that exists within an Event object
      * @return an Artist object belonging to the FindAGig API
      */
@@ -83,6 +102,7 @@ public class GigsFactory {
 
     /**
      * Creates a Venue object (FindAGig API) from an Event object
+     *
      * @param sourceVenue is a Venue object that exists within an Event object
      * @return a Venue object to be used within the FindAGig API
      */

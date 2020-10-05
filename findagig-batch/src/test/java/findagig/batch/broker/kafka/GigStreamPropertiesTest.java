@@ -9,9 +9,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 @SpringBootTest(classes = GigStreamProperties.class)
 @ActiveProfiles("local")
-class KafkaPropertiesTest {
+class GigStreamPropertiesTest {
 
     @Autowired
     private GigStreamProperties kafkaProperties;
@@ -20,9 +22,10 @@ class KafkaPropertiesTest {
     void validateAllKafkaPropertiesContent() {
         List<String> brokers = kafkaProperties.getBrokers();
 
-        Assert.assertTrue(brokers.size() == 1);
-        Assert.assertTrue(kafkaProperties.getClientId().startsWith(new String("event.findagig.cli")));
-        Assert.assertTrue(kafkaProperties.getAppId().startsWith("event.findagig.app"));
-        Assert.assertEquals(kafkaProperties.getTopic(), "event");
+        assertTrue(brokers.size() == 1);
+        assertTrue(kafkaProperties.getClientId().startsWith(new String("gig.findagig.cli")));
+        assertTrue(kafkaProperties.getAppId().startsWith("gig.findagig.app"));
+        assertEquals(kafkaProperties.getTopic(), "gig");
+        assertNull(kafkaProperties.getToTopic());
     }
 }
