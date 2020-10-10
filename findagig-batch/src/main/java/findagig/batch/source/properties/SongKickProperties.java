@@ -36,20 +36,26 @@ public class SongKickProperties {
         return apiKey;
     }
 
-    public String getUpcomingEventsByMetroAreaIdURL() {
-        return upcomingEventsByMetroAreaIdURL;
+    public String getUpcomingEventsByMetroAreaIdURL(Long metroAreaId, Integer pageNumber) {
+        return upcomingEventsByMetroAreaIdURL
+                .replace("{metro_area_id}", metroAreaId.toString())
+                .replace("{pageNum}", pageNumber.toString());
     }
 
-    public String getSearchByLocationNameURL() {
-        return searchByLocationNameURL;
+    public String getSearchByLocationNameURL(String locationName, Integer pageNumber) {
+        return searchByLocationNameURL
+                .replace("{location_name}", locationName)
+                .replace("{pageNum}", pageNumber.toString());
     }
 
-    public String getSearchVenueByNameURL() {
-        return searchVenueByNameURL;
+    public String getSearchVenueByNameURL(String venueName) {
+        return searchVenueByNameURL
+                .replace("{venue_name}", venueName);
     }
 
-    public String getSearchVenueByIdURL() {
-        return searchVenueByIdURL;
+    public String getSearchVenueByIdURL(Long venueId) {
+        return searchVenueByIdURL
+                .replace("{venue_id}", venueId.toString());
     }
 
 

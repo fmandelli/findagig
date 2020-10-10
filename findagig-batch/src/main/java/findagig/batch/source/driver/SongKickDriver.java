@@ -35,7 +35,7 @@ public class SongKickDriver {
     private SongKickProperties songKickProperties;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private RestTemplate restTemplate = new RestTemplate();
     private static final ObjectMapper mapper = new ObjectMapper();
 
     {
@@ -52,12 +52,10 @@ public class SongKickDriver {
      */
     public List<MetroArea> getLocationsByName(String locationName) {
 
-        String uri = songKickProperties.getSearchByLocationNameURL()
-                .replace("{location_name}", locationName)
-                .replace("{pageNum}", "1");
+        String uri = songKickProperties.getSearchByLocationNameURL(locationName, 1);
+
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(uri, String.class);
+            String result = callExternalAPI(uri);
             JsonNode resultJson = mapper.readTree(result);
 
             JsonNode locationNode = resultJson.findValue("location");
@@ -92,15 +90,12 @@ public class SongKickDriver {
      * @param metroAreaId is a SongKick MetroAreaId
      * @return List of upcoming Events of a Metro Area
      */
-    public List<Event> getUpcomingEventsByMetroAreaId(long metroAreaId, int pageNumber) {
+    public List<Event> getUpcomingEventsByMetroAreaId(Long metroAreaId, Integer pageNumber) {
 
-        String uri = songKickProperties.getUpcomingEventsByMetroAreaIdURL()
-                .replace("{metro_area_id}", String.valueOf(metroAreaId))
-                .replace("{pageNum}", String.valueOf(pageNumber));
+        String uri = songKickProperties.getUpcomingEventsByMetroAreaIdURL(metroAreaId, pageNumber);
 
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String json = restTemplate.getForObject(uri, String.class);
+            String json = callExternalAPI(uri);
 
             logger.info("Response of upcoming Events by MetroAreaId.",
                     keyValue("EVENT", "EVENT_HTTP_RESPONSE"),
@@ -121,6 +116,7 @@ public class SongKickDriver {
         }
         return null;
     }
+
 
 
     /**
@@ -165,12 +161,10 @@ public class SongKickDriver {
      */
     public Venue getVenueById(Long venueId) {
         /* replaces parameter in the url */
-        String uri = songKickProperties.getSearchVenueByIdURL()
-                .replace("{venue_id}", venueId.toString());
+        String uri = songKickProperties.getSearchVenueByIdURL(venueId);
 
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            String json = restTemplate.getForObject(uri, String.class);
+            String json = callExternalAPI(uri);
 
             logger.info("Response of searching Venue by ID.",
                     keyValue("EVENT", "EVENT_HTTP_RESPONSE"),
@@ -224,5 +218,15 @@ public class SongKickDriver {
                     keyValue("EXCEPTION", e.toString()));
         }
         return null;
+    }
+
+
+    /**
+     * Call external SongKick API
+     * @param uri
+     * @return
+     */
+    private String callExternalAPI(String uri) {
+        return this.restTemplate.getForObject(uri, String.class);
     }
 }
