@@ -1,0 +1,17 @@
+@startuml C4_Elements
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context Diagram for FindAGig System
+
+Person(rocker, "Rocker", "A person seeking for gigs in his/her area")
+System(findAGig, "FindAGig", "Allow users to check the current gigs agenda in his/her area")
+System_Ext(songKick, "SongKick", "Services that stores all the events agenda per area")
+
+
+Rel(rocker, findAGig,"Check Gigs Agenda","http")
+Rel(findAGig, rocker, "Notify about new gigs or updates","http")
+
+Rel_Back(findAGig, songKick,"Pull events agenda per area", "hhtp")
+@enduml

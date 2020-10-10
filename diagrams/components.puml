@@ -1,0 +1,26 @@
+@startuml C4_Elements
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(rocker, "Rocker", "A person seeking for gigs in his/her area")
+System_Ext(songKick, "SongKick", "Services that stores all the events agenda per area")
+
+System_Boundary(c1, "FindAGig Major Internal Components") {
+    Component(eventJob, "Event Batch Job", "Pull events periodically from external soucers")
+    ContainerDb(kafka, "Kafka", "Streaming Platform")
+    Component(eventConsumer, "Event Stream Consumer", "Consume events and publish gigs if not duplicated")
+    Component(gigConsumer, "Gig Stream Consumer", "Consume gigs and create an in-memory, GlobalKTable projection")
+    Component(gigRepo,"Gigs Repositoy", "In memory gigs Key/Value Map with getByKey search")
+    Component(api,"REST API", "Handle client requests for gigs in a area")
+}
+
+Rel_L(eventJob, songKick, "Request events available in an area ", "http")
+Rel(eventJob, kafka, "Publish events into event topic ", "tcp")
+Rel(kafka, eventConsumer, "stream of Events not consumed ", "tcp")
+Rel(kafka, gigConsumer, "stream of Gigs not consumed", "tcp")
+Rel(eventConsumer, kafka, "Publish new Gigs converted from Events", "tcp")
+Rel(eventConsumer, gigRepo, "Search Gig by key to check duplicity", "tcp")
+Rel(gigConsumer, gigRepo, "Load gigs in the in-memory repo")
+Rel(rocker, api, "Request gigs available in his/her area")
+Rel(api, gigRepo, "Search for gigs available in a area")
+
+@enduml
