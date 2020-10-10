@@ -19,6 +19,5 @@ class KafkaSecurityPropertiesTest {
         Assert.assertTrue(securityProperties.getPassword().endsWith("fHDoeA1B4E"));
         Assert.assertTrue(securityProperties.getSaslSslSecurityProtocol().equalsIgnoreCase("SASL_SSL"));
         Assert.assertTrue(securityProperties.getScramSha256Mechanism().equalsIgnoreCase("SCRAM-SHA-256"));
-        Assert.assertTrue(securityProperties.getEventTopic().equalsIgnoreCase(securityProperties.getUsername() + "-event"));
     }
 }

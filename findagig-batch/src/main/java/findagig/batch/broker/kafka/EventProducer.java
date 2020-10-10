@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Properties;
 
+import static findagig.batch.broker.kafka.KafkaProperties.getPropertiesWithSecurity;
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
 /**
@@ -29,14 +30,14 @@ public class EventProducer {
     private KafkaProducer kafkaProducer;
 
     @Autowired
-    private KafkaProperties kafkaProperties;
+    private EventStreamProperties streamProperties;
 
     @Autowired(required = false)
     private KafkaSecurityProperties securityProperties;
 
     @PostConstruct
     public void startProducer() {
-        Properties properties = kafkaProperties.addSecurity(securityProperties);
+        Properties properties = getPropertiesWithSecurity(securityProperties, streamProperties);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         kafkaProducer = new KafkaProducer(properties);
@@ -49,15 +50,15 @@ public class EventProducer {
      */
     public void produce(Event event) throws Exception {
         try {
-            kafkaProducer.send(new ProducerRecord(this.kafkaProperties.getEventTopic(), event.getId(), event));
+            kafkaProducer.send(new ProducerRecord(this.streamProperties.getTopic(), event.getId(), event));
             logger.info("Event object successfully produced on Kafka topic",
                     keyValue("event", "EVENT_KAFKA_PRODUCE"),
-                    keyValue("TOPIC", this.kafkaProperties.getEventTopic()),
+                    keyValue("TOPIC", this.streamProperties.getTopic()),
                     keyValue("JSON_OBJECT", event.toString()));
         } catch (Exception e) {
             logger.error("Error on producing an Event object on Kafka topic",
                     keyValue("event", "EVENT_KAFKA_PRODUCE_ERROR"),
-                    keyValue("TOPIC", this.kafkaProperties.getEventTopic()),
+                    keyValue("TOPIC", this.streamProperties.getTopic()),
                     keyValue("JSON_OBJECT", event.toString()),
                     keyValue("EXCEPTION", e.toString()));
         }

@@ -1,0 +1,18 @@
+@startuml C4_Elements
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+Person(rocker, "Rocker", "A person seeking for gigs in his/her area")
+System_Ext(songKick, "SongKick", "Services that stores all the events agenda per area")
+
+System_Boundary(c1, "FindAGig System Containers") {
+    ContainerDb(kafka, "Kafka", "Streaming Platform")
+    Container(batch,"FindAGig Batch","Pull gigs from external sources")
+    Container(api,"FindAGig API","REST API to interact and manage users")
+}
+
+Rel(rocker, api, "Search for gigs","http")
+Rel_R(batch, songKick, "pull new or updated events")
+Rel(batch, kafka, "produce internal gigs from external events","tcp")
+Rel(api, kafka, "get gigs from area")
+
+@enduml
