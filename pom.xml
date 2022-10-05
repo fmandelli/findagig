@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <logback.version>1.2.3</logback.version>
         <logstash.version>6.3</logstash.version>
-        <jackson.version>2.10.2</jackson.version>
+        <jackson.version>2.12.6.1</jackson.version>
         <kafka.version>2.4.1</kafka.version>
         <springframework-kafka.version>2.4.4.RELEASE</springframework-kafka.version>
     </properties>
