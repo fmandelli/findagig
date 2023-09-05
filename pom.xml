@@ -22,7 +22,7 @@
         <logback.version>1.2.3</logback.version>
         <logstash.version>6.3</logstash.version>
         <jackson.version>2.10.2</jackson.version>
-        <kafka.version>2.4.1</kafka.version>
+        <kafka.version>2.6.3</kafka.version>
         <springframework-kafka.version>2.4.4.RELEASE</springframework-kafka.version>
     </properties>
 
